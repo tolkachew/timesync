@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdowns</title>
+</head>
+<body>
+<div>
+    <table>
+        <tr>
+            <th>Id</th><th>Name</th><th>Time</th><th>Action</th>
+        </tr>
+        <tbody>
+        <tr th:each="countdown: ${countdowns}">
+            <td th:utext="${countdown.id}"></td>
+            <td th:utext="${countdown.name}"></td>
+            <td th:text="${#dates.format(countdown.time, 'dd-MM-yyyy HH:mm')}"></td>
+            <td>
+                <form th:action="@{/start(id=${countdown.id})}" th:method="post" style="margin: 0; padding: 0;">
+                    <a href="#" onclick="this.closest('form').submit();return false;" style="display: inline;">Start</a>
+                </form>
+                <form th:action="@{/delete(id=${countdown.id})}" th:method="delete" style="margin: 0; padding: 0;">
+                    <a href="#" onclick="this.closest('form').submit();return false;" style="display: inline;">Delete</a>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form method="post" th:action="@{/list}" th:object = "${countdown}">
+        <div>
+            <label for="name" class="form-label">Name</label>
+            <input type="text" id="name" th:field="*{name}">
+            <label for="name" class="form-label">Time</label>
+            <input type="datetime-local" id="time" th:field="*{time}">
+        </div>
+        <button type="submit">Add</button>
+        <button type="reset" value="Reset">Reset</button>
+    </form>
+</div>
+</body>
+</html>

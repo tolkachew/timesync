@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://cdn.tiny.cloud/1/u8kfaxqnii8cwc2z74xyqib61acieesoe89hgxa0xy3gc5ei/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+<body>
+<form method="post" th:action="@{/save}" th:object="${countDown}">
+  <textarea th:field="*{html}">
+     Welcome to TinyMCE!
+  </textarea>
+</form>
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        height: 400,
+        menubar: false,
+        plugins: 'save anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage  tableofcontents footnotes mergetags autocorrect typography inlinecss',
+        toolbar: 'save | undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+    });
+</script>
+<div>
+    <div th:each="countDown: ${blocks}">
+        <div th:remove="tag" th:utext="${countDown.html}"></div>
+    </div>
+</div>
+</body>
+</html>

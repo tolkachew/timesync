@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+<body>
+<div id="timer"></div>
+<form th:action="@{/start(id=${countdown.id})}" th:method="post">
+    <button th:if="${available}" type="submit" id="button">Submit</button>
+</form>
+
+<script th:inline="javascript">
+    function getDateTime(){
+        var dateTime=[[${#dates.format(countdown.time, 'dd-MM-yyyy HH:mm')}]];
+        var now = moment();
+        var end = moment(dateTime, 'DD-MM-yyyy HH:mm');
+        var duration = moment.duration(end.diff(now));
+        let time = Math.round(duration.asMilliseconds() / 1000); //Время в с
+        let days = Math.floor(time / (24 * 60 * 60));
+        let hours = Math.floor((time - days * 24 * 60 * 60) / (60 * 60));
+        let minutes = Math.floor((time - days * 24 * 60 * 60 - hours * 24 * 60) / 60);
+        let seconds = Math.floor((time - days * 24 * 60 * 60 - hours * 24 * 60 - minutes * 60));
+        if (time>0)
+            $("#timer").html(`days: ${days}, hours: ${hours}, minutes: ${minutes}, seconds: ${seconds}`);
+        else
+            $("#timer").html(`days: 0, hours: 0, minutes: 0, seconds: 0`);
+        if (time<1) setTimeout(()=>{
+            clearInterval(timer);
+            seconds = 0;
+            $("#timer").html(`days: ${days}, hours: ${hours}, minutes: ${minutes}, seconds: ${seconds}`);
+            $("#button").hide();}, 0);
+    };
+
+    
+
+    var timer = setInterval(()=>getDateTime(),1000);
+
+
+</script>
+</body>
+</html>
